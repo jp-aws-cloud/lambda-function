@@ -2,7 +2,7 @@
 
 You can use AWS Lambda to run code without provisioning or managing `servers`.
 
-Lambda runs your code on a high-availability compute infrastructure and performs all of the administration of the compute resources, including server and operating system maintenance, capacity provisioning and `automatic scaling`, and `logging`. 
+Lambda runs your code on a high-availability compute infrastructure and performs all of the administration of the compute resources, including server and operating system maintenance, capacity provisioning and `automatic scaling`, and `logging`.
 
 With Lambda, all you need to do is supply your code in one of the language runtimes that Lambda supports.
 
@@ -43,3 +43,34 @@ When using Lambda, you are responsible only for your code. Lambda manages the co
 6. eave architecture set to `x86_64` and choose `Create function`.
 
 ![Create your first Lambda function](image.png)
+
+For Example, if you choose python runtime, Paste the following code into the lambda_function.py tab, replacing the code that Lambda created.
+
+```python
+
+import json
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+def lambda_handler(event, context): # entry level function 
+
+    # Get the length and width parameters from the event object. The
+    # runtime converts the event object to a Python dictionary
+    length = event['length']
+    width = event['width']
+
+    area = calculate_area(length, width)
+    print(f"The area is {area}")
+
+    logger.info(f"CloudWatch logs group: {context.log_group_name}")
+
+    # return the calculated area as a JSON string
+    data = {"area": area}
+    return json.dumps(data)
+
+def calculate_area(length, width):
+    return length*width
+    
+```
